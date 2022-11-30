@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+
+public class CoffeeKiosk {
+    private ArrayList<Item> menu = new ArrayList<Item>();
+    private ArrayList<Order> orders = new ArrayList<Order>();
+
+    public CoffeeKiosk() {}
+    
+    public void addMenuItem(String name, double price) {
+    Item newItem = new Item(name, price);
+    menu.add(newItem);
+    int index = menu.indexOf(newItem);
+    newItem.setIndex(index);
+    }
+
+    public void displayMenu() {
+    for(Item i: this.menu) {
+        System.out.println(i.getIndex() + " " + i.getName() + " -- $" + i.getPrice());
+        }
+    }
+    
+    public void newOrder() {
+        
+    	// Shows the user a message prompt and then sets their input to a variable, name
+        System.out.println("Please enter customer name for new order:");
+        String name = System.console().readLine();
+    
+    	// Your code:
+        // Create a new order with the given input string
+        Order newOrder = new Order(name);
+        // Show the user the menu, so they can choose items to add.
+        displayMenu();
+    	// Prompts the user to enter an item number
+        System.out.println("Please enter a menu item index or q to quit:");
+        String itemNumber = System.console().readLine();
+        
+        // Write a while loop to collect all user's order items
+        while(!itemNumber.equals("q")) {
+            
+            // Get the item object from the menu, and add the item to the order
+            int i = Integer.parseInt(itemNumber);
+            if(i < this.menu.size()) {
+                Item orderItem = menu.get(i);
+                newOrder.addItem(orderItem);
+            }else{
+                System.out.println("We don't sell that here");
+            }
+            // Ask them to enter a new item index or q again, and take their input
+            System.out.println("Please enter a new item index of drink you would like to order, or press q to exit");
+            itemNumber = System.console().readLine();
+        }
+        // After you have collected their order, print the order details 
+    	// as the example below. You may use the order's display method.
+        newOrder.display();
+        this.orders.add(newOrder);
+    }
+    public void addMenuItemByInput() {
+        String isCompleted = "y";
+        while(isCompleted.equals("y")) {
+            System.out.println("Please enter item name:");
+            String itemName = System.console().readLine();
+            while(itemName.isEmpty()) {
+                System.out.println("Item Name is not valid");
+                itemName = System.console().readLine();
+            }
+            System.out.println("Please enter price:");
+            String itemPrice = System.console().readLine();
+            while(itemPrice.isEmpty()) {
+                System.out.println("Price is not valid");
+                itemPrice = System.console().readLine();
+            }
+            double price = Double.parseDouble(itemPrice);
+
+            addMenuItem(itemName, price);
+            System.out.println("Add another product? y/n");
+            isCompleted = System.console().readLine().toLowerCase();
+        }
+    }
+}
+    
